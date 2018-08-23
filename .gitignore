@@ -14,17 +14,12 @@ Desktop.ini
 # personal workdirectory
 # checkpoint*
 # model.ckpt*
-events.out.tfevents.*
-*.tfrecords
 tbd*/
 *.npy
 *.npz
 *.pkl
 .vscode/
 zcprivate/
-*.zip
-data/text8.zip
-data/spa-eng.zip
 
 # Distribution / packaging
 .Python
