@@ -1,4 +1,4 @@
-# Python package learning（暂以sklearn为例）
+# np_vs_xxx（暂以sklearn为例）
 
 一个完善的Python包（例如sklearn、tensorflow等），出于特性需求（tensorflow中所有对象都是tensor，
 似乎sklearn中的所有estimator都需要提供fit, predict接口）
@@ -22,7 +22,7 @@
 
 # 使用说明
 1. 点击页面右上角绿块块的```Clone and download```下载zip文件，再解压至一个文件夹中
-2. ```python xxx.py```（将```xxx.py```换成正确的文件名）运行```np_vs_skl```中的每一个文件
+2. ```python xxx.py```（将```xxx.py```换成正确的文件名）运行各Python包下的每一个文件
 
 # 下一步
 当你已经不满足于这份仓库的过于简略的实现，你可以看到大多数函数的具体代码实现（感谢大多数Python包是开源的），
