@@ -184,6 +184,74 @@ def tf_lstm_sequence(N0=3, N1=5, N2=7, N3=11, forget_bias=0.5):
     print('tf_lstm_sequence c1:: np vs tf: ', hfe_r5(np_c1, tf_c1_))
 
 
+def tf_bidirectional_lstm(N0=3, N1=5, N2=7, N3=11, forget_bias=0.5):
+    np1 = np.random.randn(N0, N1, N2)
+    np2 = np.random.randint(2, N1, size=[N0])
+    np_c1 = np.random.randn(N0, N3)
+    np_c2 = np.random.randn(N0, N3)
+    np_h1 = np.random.randn(N0, N3)
+    np_h2 = np.random.randn(N0, N3)
+    np_kernel1 = np.random.randn(N2+N3, N3*4)
+    np_bias1 = np.random.randn(N3*4)
+    np_kernel2 = np.random.randn(N2+N3, N3*4)
+    np_bias2 = np.random.randn(N3*4)
+    
+    np3 = np.zeros([N0,N1,N3], dtype=np.float32)
+    np4 = np.zeros([N0,N1,N3], dtype=np.float32)
+    np_h3 = np.zeros([N0,N3], dtype=np.float32)
+    np_c3 = np.zeros([N0,N3], dtype=np.float32)
+    np_h4 = np.zeros([N0,N3], dtype=np.float32)
+    np_c4 = np.zeros([N0,N3], dtype=np.float32)
+    for ind1 in range(N0):
+        hidden,cell = np_h1[ind1],np_c1[ind1]
+        for ind2 in range(np2[ind1]):
+            tmp1 = np.concatenate([np1[ind1,ind2],hidden], axis=0)
+            tmp2 = np.matmul(tmp1, np_kernel1) + np_bias1
+            tmp3 = np.split(tmp2, 4, axis=0)
+            cell = hf_sigmoid(tmp3[0])*hf_tanh(tmp3[1]) + hf_sigmoid(tmp3[2]+forget_bias)*cell
+            hidden = hf_tanh(cell) * hf_sigmoid(tmp3[3])
+            np3[ind1,ind2] = hidden
+        np_h3[ind1]= hidden
+        np_c3[ind1] = cell
+    for ind1 in range(N0):
+        hidden,cell = np_h2[ind1],np_c2[ind1]
+        for ind2 in range(np2[ind1]):
+            tmp1 = np.concatenate([np1[ind1,np2[ind1]-1-ind2],hidden], axis=0)
+            tmp2 = np.matmul(tmp1, np_kernel2) + np_bias2
+            tmp3 = np.split(tmp2, 4, axis=0)
+            cell = hf_sigmoid(tmp3[0])*hf_tanh(tmp3[1]) + hf_sigmoid(tmp3[2]+forget_bias)*cell
+            hidden = hf_tanh(cell) * hf_sigmoid(tmp3[3])
+            np4[ind1,np2[ind1]-1-ind2] = hidden
+        np_h4[ind1]= hidden
+        np_c4[ind1] = cell
+
+    with tf.Graph().as_default() as tfG:
+        tf1 = tf.constant(np1)
+        tf2 = tf.constant(np2)
+        tf_c1 = tf.constant(np_c1)
+        tf_h1 = tf.constant(np_h1)
+        tf_c2 = tf.constant(np_c2)
+        tf_h2 = tf.constant(np_h2)
+        lstm0 = tf.nn.rnn_cell.BasicLSTMCell(N3, forget_bias, name='lstm0')
+        lstm1 = tf.nn.rnn_cell.BasicLSTMCell(N3, forget_bias, name='lstm1')
+        tmp1 = tf.nn.rnn_cell.LSTMStateTuple(tf_c1, tf_h1)
+        tmp2 = tf.nn.rnn_cell.LSTMStateTuple(tf_c2, tf_h2)
+        (tf3,tf4), ((tf_c3,tf_h3),(tf_c4,tf_h4)) = tf.nn.bidirectional_dynamic_rnn(lstm0, lstm1, tf1,
+                initial_state_fw=tmp1, initial_state_bw=tmp2, sequence_length=tf2, scope='bd')
+        z1 = {x.name:x for x in lstm0.weights+lstm1.weights}
+        aop = [tf.assign(z1['bd/fw/lstm0/kernel:0'], np_kernel1), tf.assign(z1['bd/fw/lstm0/bias:0'], np_bias1),
+                tf.assign(z1['bd/bw/lstm1/kernel:0'], np_kernel2), tf.assign(z1['bd/bw/lstm1/bias:0'], np_bias2)]
+    with tf.Session(graph=tfG) as sess:
+        _ = sess.run(aop)
+        tf3_,tf4_,tf_c3_,tf_h3_,tf_c4_,tf_h4_ = sess.run([tf3,tf4,tf_c3,tf_h3,tf_c4,tf_h4])
+    print('tf_bidirectional_lstm output:: np vs tf: ', hfe_r5(np3, tf3_))
+    print('tf_bidirectional_lstm output:: np vs tf: ', hfe_r5(np4, tf4_))
+    print('tf_bidirectional_lstm h1:: np vs tf: ', hfe_r5(np_h3, tf_h3_))
+    print('tf_bidirectional_lstm c1:: np vs tf: ', hfe_r5(np_c3, tf_c3_))
+    print('tf_bidirectional_lstm h1:: np vs tf: ', hfe_r5(np_h4, tf_h4_))
+    print('tf_bidirectional_lstm c1:: np vs tf: ', hfe_r5(np_c4, tf_c4_))
+
+
 def tf_gru_single(N0=3, N2=7, N3=11):
     np1 = np.random.randn(N0, N2)
     np2 = np.random.randn(N0, N3)
@@ -257,6 +325,8 @@ if __name__=='__main__':
     tf_lstm_single()
     print('')
     tf_lstm_sequence()
+    print('')
+    tf_bidirectional_lstm()
     print('')
     tf_gru_single()
     print('')
