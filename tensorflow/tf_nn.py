@@ -21,6 +21,18 @@ def tf_dropout(N0=5, N1=1000, keep_prob=0.25):
     print('keep rate along each batch: ', tmp4)
 
 
+def tf_dropout01(N1=100, keep_prob=0.3):
+    np1 = np.random.rand(N1)
+    with tf.Graph().as_default() as tfG:
+        tf1 = tf.constant(np1)
+        tf2 = tf.nn.dropout(tf1, keep_prob, name='dropout01')
+        tf3 = tfG.get_tensor_by_name('dropout01/random_uniform:0')
+    with tf.Session(graph=tfG) as sess:
+        tf2_,tf3_ = sess.run([tf2,tf3])
+    np2 = np.floor(tf3_+keep_prob) * np1/keep_prob
+    print('tf_dropout01:: np vs tf: ', hfe_r5(np2, tf2_))
+
+
 def tf_top_k(N0=4, N1=10, k=3):
     np1 = np.random.rand(N0, N1)
     np2 = np.sort(np1, axis=1)[:,::-1][:,:k]
@@ -50,6 +62,8 @@ def tf_normalize_with_moments(N0=100, N1=5):
 
 if __name__=='__main__':
     tf_dropout()
+    print('')
+    tf_dropout01()
     print('')
     tf_top_k()
     print('')
