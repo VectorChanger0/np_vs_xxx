@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+from itertools import zip_longest
 
 hfe = lambda x,y:np.max(np.abs(x-y)/(np.abs(x)+np.abs(y)+1e-3))
 hfe_r5 = lambda x,y:round(hfe(x,y), 5)
@@ -83,6 +84,49 @@ def tf_embedding_lookup(max_int=1000, embedding_dim=128, shape=(10,100)):
     print('embedding_lookup:: tf vs np: ', hfe_r5(np3, tf3_))
 
 
+def tf_embedding_lookup_mod(N0=(5,3,7), N1=9, N2=11):
+    def _maximum_index(len_):
+        tmp1 = list(enumerate(len_))
+        x = min(tmp1, key=lambda x:x[1])
+        return x[1]*len(tmp1) + x[0] #exclude self
+    np_i = [np.random.uniform(size=[x,N1]) for x in N0]
+    max_len = _maximum_index(N0)
+    np1 = np.random.randint(0, max_len, size=[N2])
+    tmp1 = np.stack([y for x in zip_longest(*np_i) for y in x if y is not None], axis=0)
+    np2 = tmp1[np1]
+
+    with tf.Graph().as_default() as tfG:
+        tf_i = [tf.constant(x) for x in np_i]
+        tf1 = tf.constant(np1)
+        tf2 = tf.nn.embedding_lookup(tf_i, tf1, partition_strategy='mod')
+    with tf.Session(graph=tfG) as sess:
+        tf2_ = sess.run(tf2)
+    print('embedding_lookup_mod:: np vs tf: ', hfe_r5(np2, tf2_))
+
+
+def tf_embedding_lookup_div(N0=(5,3,7), N1=9, N2=11):
+    def _effective_N0(N0):
+        min_ = min(N0)
+        N0 = [min(max(x,min_),min_+1) for x in N0]
+        ret = [N0[0]]
+        for x in N0[1:]:
+            ret.append(min(ret[-1], x))
+        return ret
+    N0 = _effective_N0(N0)
+    np_i = [np.random.uniform(size=[x,N1]) for x in N0]
+    np1 = np.random.randint(0, sum(N0), size=[N2])
+
+    np2 = np.concatenate(np_i, axis=0)[np1]
+
+    with tf.Graph().as_default() as tfG:
+        tf_i = [tf.constant(x) for x in np_i]
+        tf1 = tf.constant(np1)
+        tf2 = tf.nn.embedding_lookup(tf_i, tf1, partition_strategy='div')
+    with tf.Session(graph=tfG) as sess:
+        tf2_ = sess.run(tf2)
+    print('embedding_lookup_div:: np vs tf: ', hfe_r5(np2, tf2_))
+
+
 if __name__=='__main__':
     tf_count01234()
     print('')
@@ -91,5 +135,7 @@ if __name__=='__main__':
     tf_map_fn_sequence_boolean_mask()
     print('')
     tf_embedding_lookup()
-
-
+    print('')
+    tf_embedding_lookup_mod()
+    print('')
+    tf_embedding_lookup_div()
