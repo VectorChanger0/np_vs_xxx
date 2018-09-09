@@ -64,6 +64,19 @@ def tf_mod(min_=-100, max_=100, N0=100, y=7):
     print('tf.mod:: np vs tf: ', hfe_r5(np2, tf2_))
 
 
+def tf_tensordot(shape0=(3,5,7), shape1=(7,5,11), axes=((1,2),(1,0))):
+    np1 = np.random.randn(*shape0)
+    np2 = np.random.randn(*shape1)
+    np3 = np.tensordot(np1, np2, axes=axes)
+
+    tf1 = tf.constant(np1)
+    tf2 = tf.constant(np2)
+    tf3 = tf.tensordot(tf1, tf2, axes)
+    with tf.Session() as sess:
+        tf3_ = sess.run(tf3)
+    print('tf_tensordot:: np vs tf: ', hfe_r5(np3,tf3_))
+
+
 if __name__=='__main__':
     tf_multiply_or_matmultiply()
     print('')
@@ -72,3 +85,5 @@ if __name__=='__main__':
     tf_matrix_set_diag()
     print('')
     tf_mod()
+    print('')
+    tf_tensordot()
