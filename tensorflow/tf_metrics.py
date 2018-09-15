@@ -113,11 +113,11 @@ if __name__=='__main__':
     tf.logging.set_verbosity(tf.logging.ERROR) #suppress info in estimator
 
     tf_metrics_acc()
-    print('')
+    print()
     tf_metrics_auc()
-    print('')
+    print()
     tf_estimator_auc_one_labels()
-    print('')
+    print()
     tf_estimator_auc_multi_labels()
 
     tf.logging.set_verbosity(tf.logging.INFO)

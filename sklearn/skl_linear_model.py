@@ -50,7 +50,7 @@ def skl_logistic_regression():
 
 if __name__=='__main__':
     skl_linear_regression()
-    print('')
+    print()
     skl_ridge()
 
 

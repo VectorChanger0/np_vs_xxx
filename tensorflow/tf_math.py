@@ -79,11 +79,11 @@ def tf_tensordot(shape0=(3,5,7), shape1=(7,5,11), axes=((1,2),(1,0))):
 
 if __name__=='__main__':
     tf_multiply_or_matmultiply()
-    print('')
+    print()
     tf_diag_diag_part()
-    print('')
+    print()
     tf_matrix_set_diag()
-    print('')
+    print()
     tf_mod()
-    print('')
+    print()
     tf_tensordot()

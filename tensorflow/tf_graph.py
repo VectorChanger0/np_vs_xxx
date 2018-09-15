@@ -77,6 +77,6 @@ def tf_saved_model():
 
 if __name__=='__main__':
     _test_tf_save_graph()
-    print('')
+    print()
     _test_tf_load_graph_from_meta()
 

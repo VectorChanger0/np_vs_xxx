@@ -32,7 +32,7 @@ def tf_get_group_aop():
 
 if __name__=='__main__':
     _test_load_ckpt()
-    print('')
+    print()
     tf_get_group_aop()
 
 

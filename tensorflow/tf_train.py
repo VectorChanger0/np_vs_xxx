@@ -76,7 +76,7 @@ def tf_global_step_with_two_train_op(op1_with_global_step=True, op2_with_global_
 
 if __name__=='__main__':
     tf_ExponentialMovingAverage()
-    print('')
+    print()
     tf_global_step()
-    print('')
+    print()
     tf_global_step_with_two_train_op()

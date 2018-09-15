@@ -31,5 +31,5 @@ def tf_variable_scope_constraints(value0=1.5, lr=0.3, step=6, clip_min=0, clip_m
 
 if __name__=='__main__':
     tf_tensor_op_name_in_variable_scope()
-    print('')
+    print()
     tf_variable_scope_constraints()

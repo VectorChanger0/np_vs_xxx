@@ -145,7 +145,7 @@ def tf_bidirectional_lstm(N0=3, N1=5, N2=7, N3=11, forget_bias=0.5):
 
 if __name__=='__main__':
     tf_lstm_single()
-    print('')
+    print()
     tf_lstm_sequence()
-    print('')
+    print()
     tf_bidirectional_lstm()

@@ -63,11 +63,11 @@ def tf_keras_hard_sigmoid(size=(3,5), low=-5, high=5):
 
 if __name__=='__main__':
     tf_relu()
-    print('')
+    print()
     tf_leaky_relu()
-    print('')
+    print()
     tf_sigmoid()
-    print('')
+    print()
     tf_softmax()
-    print('')
+    print()
     tf_keras_hard_sigmoid()

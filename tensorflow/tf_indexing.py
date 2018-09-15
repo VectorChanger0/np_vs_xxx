@@ -129,13 +129,13 @@ def tf_embedding_lookup_div(N0=(5,3,7), N1=9, N2=11):
 
 if __name__=='__main__':
     tf_count01234()
-    print('')
+    print()
     tf_boolean_mask()
-    print('')
+    print()
     tf_map_fn_sequence_boolean_mask()
-    print('')
+    print()
     tf_embedding_lookup()
-    print('')
+    print()
     tf_embedding_lookup_mod()
-    print('')
+    print()
     tf_embedding_lookup_div()

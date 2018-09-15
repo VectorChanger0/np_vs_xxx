@@ -62,9 +62,9 @@ def tf_normalize_with_moments(N0=100, N1=5):
 
 if __name__=='__main__':
     tf_dropout()
-    print('')
+    print()
     tf_dropout01()
-    print('')
+    print()
     tf_top_k()
-    print('')
+    print()
     tf_normalize_with_moments()

@@ -138,7 +138,7 @@ def tf_crf_decode(N0=3, N1=5, N2=7):
 
 if __name__=='__main__':
     tf_crf_score()
-    print('')
+    print()
     tf_crf_CrfForwardRnnCell()
-    print('')
+    print()
     tf_crf_decode()

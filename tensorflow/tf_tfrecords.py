@@ -130,6 +130,6 @@ def tf_var_length_tfrecords(N0=100, min_len=3, max_len=7):
 
 if __name__=='__main__':
     tf_write_read_tfrecords()
-    print('')
+    print()
     tf_var_length_tfrecords()
 

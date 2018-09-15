@@ -84,10 +84,10 @@ def tf_regularizer(N0=4, N1=3):
 
 if __name__=='__main__':
     tf_sigmoid_cross_entropy_with_logits()
-    print('')
+    print()
     tf_weighted_cross_entropy()
-    print('')
+    print()
     tf_l2_loss()
-    print('')
+    print()
     tf_regularizer()
 

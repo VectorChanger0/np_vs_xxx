@@ -149,9 +149,9 @@ def tf_bidirectional_rnn(N0=3, N1=5, N2=7, N3=11):
 
 if __name__=='__main__':
     tf_rnn_single()
-    print('')
+    print()
     tf_rnn_dropout()
-    print('')
+    print()
     tf_rnn_sequence()
-    print('')
+    print()
     tf_bidirectional_rnn()

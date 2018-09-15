@@ -76,5 +76,5 @@ def tf_gru_sequence(N0=3, N1=5, N2=7, N3=11):
 
 if __name__=='__main__':
     tf_gru_single()
-    print('')
+    print()
     tf_gru_sequence()
