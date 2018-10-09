@@ -127,6 +127,28 @@ def tf_embedding_lookup_div(N0=(5,3,7), N1=9, N2=11):
     print('embedding_lookup_div:: np vs tf: ', hfe_r5(np2, tf2_))
 
 
+def tf_argsort(tf1, axis=-1):
+    def _exchange_axis(ndim, axis1, axis2):
+        assert (axis1<ndim) and (axis2<ndim)
+        ret = list(range(ndim))
+        if axis1!=axis2: ret[axis1], ret[axis2] = ret[axis2], ret[axis1]
+        return ret
+    ndim = len(tf1.shape.as_list())
+    tf1 = tf.transpose(tf1, _exchange_axis(ndim, axis, -1))
+    ret = tf.nn.top_k(tf1, tf.shape(tf1)[-1])[1][..., ::-1]
+    return tf.transpose(ret, _exchange_axis(ndim, axis, -1))#[..., ::-1]
+
+def _test_tf_argsort(shape=(5,6,7), axis=1):
+    np1 = np.random.rand(*shape)
+    np2 = np1.argsort(axis=axis)
+
+    tf1 = tf.constant(np1)
+    tf2 = tf_argsort(tf1, axis)
+    with tf.Session() as sess:
+        tf2_ = sess.run(tf2)
+    print('tf_argsort:: np vs tf: ', hfe_r5(np2, tf2_))
+
+
 if __name__=='__main__':
     tf_count01234()
     print()
@@ -139,3 +161,5 @@ if __name__=='__main__':
     tf_embedding_lookup_mod()
     print()
     tf_embedding_lookup_div()
+    print()
+    _test_tf_argsort()
