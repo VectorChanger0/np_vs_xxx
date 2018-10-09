@@ -128,15 +128,14 @@ def tf_embedding_lookup_div(N0=(5,3,7), N1=9, N2=11):
 
 
 def tf_argsort(tf1, axis=-1):
-    def _exchange_axis(ndim, axis1, axis2):
-        assert (axis1<ndim) and (axis2<ndim)
-        ret = list(range(ndim))
-        if axis1!=axis2: ret[axis1], ret[axis2] = ret[axis2], ret[axis1]
-        return ret
     ndim = len(tf1.shape.as_list())
-    tf1 = tf.transpose(tf1, _exchange_axis(ndim, axis, -1))
+    is_transpose = (axis!=-1) and (axis!=ndim-1)
+    if is_transpose:
+        transpose_axis = list(range(ndim))
+        transpose_axis[axis], transpose_axis[-1] = transpose_axis[-1], transpose_axis[axis]
+        tf1 = tf.transpose(tf1, transpose_axis)
     ret = tf.nn.top_k(tf1, tf.shape(tf1)[-1])[1][..., ::-1]
-    return tf.transpose(ret, _exchange_axis(ndim, axis, -1))#[..., ::-1]
+    return tf.transpose(ret, transpose_axis) if is_transpose else ret
 
 def _test_tf_argsort(shape=(5,6,7), axis=1):
     np1 = np.random.rand(*shape)
