@@ -25,7 +25,7 @@ def tf_lstm_single(N0=3, N2=7, N3=11, forget_bias=0.5):
         tf_x = tf.constant(inputx)
         tf_c = tf.constant(cell)
         tf_h = tf.constant(hidden)
-        lstm0 = tf.nn.rnn_cell.BasicLSTMCell(N3, forget_bias, name='lstm0')
+        lstm0 = tf.nn.rnn_cell.LSTMCell(N3, forget_bias=forget_bias, name='lstm0')
         tf1,(tf_c1,tf_h1) = lstm0(tf_x, (tf_c,tf_h))
         z1 = {x.name:x for x in lstm0.weights}
         aop = [tf.assign(z1['lstm0/kernel:0'], ucfo_kernel), tf.assign(z1['lstm0/bias:0'], ucfo_bias)]
@@ -64,7 +64,7 @@ def tf_lstm_sequence(N0=3, N1=5, N2=7, N3=11, forget_bias=0.5):
         tf_sequence_length = tf.constant(sequence_length)
         tf_c = tf.constant(cell)
         tf_h = tf.constant(hidden)
-        lstm0 = tf.nn.rnn_cell.BasicLSTMCell(N3, forget_bias, name='lstm0')
+        lstm0 = tf.nn.rnn_cell.LSTMCell(N3, forget_bias=forget_bias, name='lstm0')
         tmp1 = tf.nn.rnn_cell.LSTMStateTuple(tf_c, tf_h)
         tf1,(tf_c1,tf_h1) = tf.nn.dynamic_rnn(lstm0, tf_x, initial_state=tmp1, sequence_length=tf_sequence_length, scope='d_lstm0')
         z1 = {x.name:x for x in lstm0.weights}
@@ -123,8 +123,8 @@ def tf_bidirectional_lstm(N0=3, N1=5, N2=7, N3=11, forget_bias=0.5):
         tf_hf = tf.constant(hidden_f)
         tf_cb = tf.constant(cell_b)
         tf_hb = tf.constant(hidden_b)
-        lstm0 = tf.nn.rnn_cell.BasicLSTMCell(N3, forget_bias, name='lstm0')
-        lstm1 = tf.nn.rnn_cell.BasicLSTMCell(N3, forget_bias, name='lstm1')
+        lstm0 = tf.nn.rnn_cell.LSTMCell(N3, forget_bias=forget_bias, name='lstm0')
+        lstm1 = tf.nn.rnn_cell.LSTMCell(N3, forget_bias=forget_bias, name='lstm1')
         tmp1 = tf.nn.rnn_cell.LSTMStateTuple(tf_cf, tf_hf)
         tmp2 = tf.nn.rnn_cell.LSTMStateTuple(tf_cb, tf_hb)
         (tf1,tf2), ((tf_cf1,tf_hf1),(tf_cb1,tf_hb1)) = tf.nn.bidirectional_dynamic_rnn(lstm0, lstm1, tf_x,
