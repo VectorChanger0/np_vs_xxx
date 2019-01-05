@@ -23,7 +23,7 @@ def tf_bn_training_with_control_dependencies(N0=97, N1=5, momentum=0.9, epsilon=
         tfvar0 = tf.get_variable('tfvar0', shape=np1.shape, dtype=tf.float64)
         tf1 = tf.layers.batch_normalization(tfvar0, axis=1, scale=False, center=False,
                 momentum=momentum, epsilon=epsilon, training=True, name='bn1')
-        tf2 = tf.reduce_mean(tf1)
+        tf2 = tf.math.reduce_mean(tf1)
         with tf.control_dependencies(tfG.get_collection(tf.GraphKeys.UPDATE_OPS)):
             train_op = tf.train.GradientDescentOptimizer(0.01).minimize(tf2)
         z1 = {x.name:x for x in tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)}
@@ -56,7 +56,7 @@ def tf_bn_training_without_control_dependencies(N0=97, N1=5, momentum=0.9, epsil
         tfvar0 = tf.get_variable('tfvar0', shape=np1.shape, dtype=tf.float64)
         tf1 = tf.layers.batch_normalization(tfvar0, axis=1, scale=False, center=False,
                 momentum=momentum, epsilon=epsilon, training=True, name='bn1')
-        tf2 = tf.reduce_mean(tf1)
+        tf2 = tf.math.reduce_mean(tf1)
         train_op = tf.train.GradientDescentOptimizer(0.01).minimize(tf2)
         z1 = {x.name:x for x in tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)}
         tf_mean = z1['bn1/moving_mean:0']
@@ -86,7 +86,7 @@ def tf_bn_not_training(N0=97, N1=5, momentum=0.9, epsilon=0.01):
         tfvar0 = tf.get_variable('tfvar0', shape=np1.shape, dtype=tf.float64)
         tf1 = tf.layers.batch_normalization(tfvar0, axis=1, scale=False, center=False,
                 momentum=momentum, epsilon=epsilon, training=False, name='bn1')
-        tf2 = tf.reduce_mean(tf1)**2 #use **2 to maintain control dependencies
+        tf2 = tf.math.reduce_mean(tf1)**2 #use **2 to maintain control dependencies
         train_op = tf.train.GradientDescentOptimizer(100).minimize(tf2)
         z1 = {x.name:x for x in tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)}
         tf_mean = z1['bn1/moving_mean:0']
@@ -286,4 +286,3 @@ if __name__=='__main__':
     tf_dense_constraints()
     print()
     tf_constraint_override_in_layers()
-    

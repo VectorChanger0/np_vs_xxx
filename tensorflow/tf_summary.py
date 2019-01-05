@@ -27,8 +27,8 @@ def tf_summary_scalar(N0=1000, N1=3):
         
         with tf.variable_scope('loss'):
             tmp1 = tf.nn.sigmoid_cross_entropy_with_logits(labels=tf.cast(tfy,x.dtype), logits=x)
-            CEloss = tf.reduce_mean(tmp1, name='CEloss')
-            REGloss = 0.01*tf.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES))
+            CEloss = tf.math.reduce_mean(tmp1, name='CEloss')
+            REGloss = 0.01*tf.math.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES))
             loss_all = CEloss + REGloss
         tf.summary.scalar('loss/cross_entropy', CEloss)
         tf.summary.scalar('loss/regularizer', REGloss)
@@ -36,7 +36,7 @@ def tf_summary_scalar(N0=1000, N1=3):
 
         with tf.variable_scope('accuracy'):
             tmp1 = tf.cast(tf.equal(tf.cast(x>0.5, tfy.dtype), tfy), tf.float32)
-            acc = tf.reduce_mean(tmp1, name='acc')
+            acc = tf.math.reduce_mean(tmp1, name='acc')
         tf.summary.scalar('acc', acc)
 
         train_op = tf.train.GradientDescentOptimizer(0.1).minimize(loss_all)

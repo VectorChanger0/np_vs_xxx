@@ -117,7 +117,7 @@ def tf_image_crop_and_resize_gradients(N1=5, N2=7, C1=3, eps=1e-5):
             np.random.uniform(0.7,0.9,[]),np.random.uniform(0.7,0.9,[])]])
     tf1 = tf.constant(np1, dtype=tf.float32)
     tf2 = tf.constant(np2, dtype=tf.float32)
-    tf3 = tf.reduce_sum(tf.image.crop_and_resize(tf1, tf2, [0], [5,5]))
+    tf3 = tf.math.reduce_sum(tf.image.crop_and_resize(tf1, tf2, [0], [5,5]))
     tfg1 = tf.gradients(tf3, tf2)[0]
     with tf.Session() as sess:
         tfg1_ = sess.run(tfg1)
@@ -200,8 +200,8 @@ def tf_scale_crop(filename, h0_i, w0_i, data_format):
     scale = tf.maximum(h0/h1,w0/w1)
     h2,w2 = tf.round(h1*scale),tf.round(w1*scale)
     h2_i,w2_i = tf.cast(h2,tf.int32), tf.cast(w2,tf.int32)
-    h3_i = tf.cast(tf.floor((h2-h0)/2), tf.int32)
-    w3_i = tf.cast(tf.floor((w2-w0)/2), tf.int32)
+    h3_i = tf.cast(tf.math.floor((h2-h0)/2), tf.int32)
+    w3_i = tf.cast(tf.math.floor((w2-w0)/2), tf.int32)
 
     image = tf.image.resize_images(image, [h2_i,w2_i])[h3_i:(h3_i+h0_i),w3_i:(w3_i+w0_i),:]
     if data_format=='channels_first':
@@ -237,8 +237,8 @@ def tf_scale_pad(filename, h0_i, w0_i, data_format):
     scale = tf.minimum(h0/h1,w0/w1)
     h2,w2 = tf.round(h1*scale),tf.round(w1*scale)
     h2_i,w2_i = tf.cast(h2,tf.int32), tf.cast(w2,tf.int32)
-    h3_i = tf.cast(tf.floor((h0-h2)/2), tf.int32)
-    w3_i = tf.cast(tf.floor((w0-w2)/2), tf.int32)
+    h3_i = tf.cast(tf.math.floor((h0-h2)/2), tf.int32)
+    w3_i = tf.cast(tf.math.floor((w0-w2)/2), tf.int32)
     tmp1 = [(h3_i,h0_i-h3_i-h2_i),(w3_i,w0_i-w3_i-w2_i),(0,0)]
 
     image = tf.pad(tf.image.resize_images(image, [h2_i,w2_i]), tmp1)
@@ -277,4 +277,3 @@ if __name__=='__main__':
     print()
 
     plt.show()
-

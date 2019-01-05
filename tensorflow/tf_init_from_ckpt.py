@@ -77,7 +77,7 @@ def tf_init_using_hook(N0=1000, N1=5000):
         predict = tfvar1**2
         if mode == tf.estimator.ModeKeys.PREDICT:
             return tf.estimator.EstimatorSpec(mode, predictions={'predict':predict})
-        loss = tf.reduce_sum(predict)
+        loss = tf.math.reduce_sum(predict)
         if mode==tf.estimator.ModeKeys.EVAL:
             mae = tf.metrics.mean_absolute_error(predict, predict)
             return tf.estimator.EstimatorSpec(mode, loss=loss, eval_metric_ops={'mae':mae})

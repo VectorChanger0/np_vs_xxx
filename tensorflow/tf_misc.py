@@ -23,7 +23,7 @@ def tf_conditional_random_field(N0=3,N1=5,N2=7):
         x,y = xy
         cond = lambda ind1,z: ind1<y
         body = lambda ind1,z: (ind1+1,tf.matmul(z[tf.newaxis],tf3)[0]*x[ind1])
-        return tf.log(tf.reduce_sum(tf.while_loop(cond, body, (tf.constant(1,tf.int64), x[0]))[1]))
+        return tf.math.log(tf.math.reduce_sum(tf.while_loop(cond, body, (tf.constant(1,tf.int64), x[0]))[1]))
     tf4 = tf.map_fn(hf1, (tf1,tf2), tf1.dtype)
     with tf.Session() as sess:
         tf4_ = sess.run(tf4)

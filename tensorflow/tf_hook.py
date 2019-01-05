@@ -10,8 +10,8 @@ def _model_fn(features, labels, mode, params):
 
     with tf.variable_scope('loss'):
         tmp1 = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits, labels=labels)
-        loss = tf.reduce_mean(tmp1)
-    acc = tf.metrics.accuracy(labels, tf.argmax(logits,axis=1), name='acc')
+        loss = tf.math.reduce_mean(tmp1)
+    acc = tf.metrics.accuracy(labels, tf.math.argmax(logits,axis=1), name='acc')
     if mode==tf.estimator.ModeKeys.EVAL:
         return tf.estimator.EstimatorSpec(mode, loss=loss, eval_metric_ops={'acc':acc})
 

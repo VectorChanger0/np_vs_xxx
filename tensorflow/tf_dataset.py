@@ -39,7 +39,7 @@ def ds_oversampling(PNRatio=7, P_sampling_ratio=1, N_sampling_ratio=7):
         # x(tf,int32,(,))
         # (ret)(tf,int64,(,))
         tmp1 = PN_sampling_ratio[x]
-        tmp2 = tf.floor(tmp1)
+        tmp2 = tf.math.floor(tmp1)
         tmp3 = tf.cast(tf.random_uniform([]) < (tmp1-tmp2), tf.int64)
         return tf.cast(tmp2, tf.int64) + tmp3
     ds2 = tf.data.Dataset.from_tensor_slices(np1).repeat().shuffle(1000) \

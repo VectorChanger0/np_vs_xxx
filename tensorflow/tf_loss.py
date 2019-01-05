@@ -68,8 +68,8 @@ def tf_regularizer(N0=4, N1=3):
         tf2 = tf.constant(np2, dtype=tf.float32)
         tmp1 = tf.layers.dense(tf1, 1, kernel_regularizer=tf.nn.l2_loss, name='dense1')[:,0]
         tmp2 = tf.nn.sigmoid_cross_entropy_with_logits(logits=tmp1, labels=tf2)
-        tf3 = tf.reduce_mean(tmp2)
-        tf4 = reg*tf.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES))
+        tf3 = tf.math.reduce_mean(tmp2)
+        tf4 = reg*tf.math.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES))
         
         z1 = {x.name:x for x in tfG.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)}
         aop = [tf.assign(z1['dense1/kernel:0'], np3), tf.assign(z1['dense1/bias:0'], np4)]
@@ -90,4 +90,3 @@ if __name__=='__main__':
     tf_l2_loss()
     print()
     tf_regularizer()
-

@@ -15,7 +15,7 @@ def tf_count01234(N0=4):
         ret_np[ind1] = (np1==ind1).sum()
 
     tf1 = tf.constant(np1, dtype=tf.int32)
-    tf2 = tf.reduce_sum(tf.cast(tf.equal(tf1, tf.range(N0)[:,tf.newaxis]),tf.int32), axis=1)
+    tf2 = tf.math.reduce_sum(tf.cast(tf.equal(tf1, tf.range(N0)[:,tf.newaxis]),tf.int32), axis=1)
     with tf.Session() as sess:
         tf2_ = sess.run(tf2)
     print('tf_count01234:: np vs tf: ', hfe(np2,tf2_))
@@ -43,7 +43,7 @@ def tf_map_fn_sequence_boolean_mask():
     tf2 = tf.constant(np2, dtype=tf.int32)
     def hf1(xy,range_max=15):
         x,y = xy
-        tmp1 = x[:y]*tf.reduce_mean(x[y:])
+        tmp1 = x[:y]*tf.math.reduce_mean(x[y:])
         ret1 = tf.shape(tmp1)[0]
         ret2 = tf.pad(tmp1,[[0,range_max-ret1]])
         ret2.set_shape([range_max])

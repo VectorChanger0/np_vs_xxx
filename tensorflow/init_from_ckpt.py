@@ -55,7 +55,7 @@ def model_fn(features, labels, mode, params):
     logits = compute_graph(features, mode)
     
     tmp1 = tf.nn.sigmoid_cross_entropy_with_logits(labels=tf.cast(labels,tf.float32), logits=logits)
-    loss = tf.reduce_mean(tmp1, name='loss')
+    loss = tf.math.reduce_mean(tmp1, name='loss')
     global_step = tf.train.get_or_create_global_step()
     if 'ckpt' in params:
         tf.train.init_from_checkpoint(params['ckpt'], params['assignment_map'])

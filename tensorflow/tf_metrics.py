@@ -53,7 +53,7 @@ def tf_metrics_auc(N1=1000):
 def tf_estimator_auc_one_labels(N0=1000):
     def _estimator_model_fn(features, labels, mode, params=None):
         tfvar1 = tf.get_variable('tfvar1', shape=[], dtype=tf.float32)
-        loss = tf.reduce_sum(features + tfvar1)*0
+        loss = tf.math.reduce_sum(features + tfvar1)*0
 
         if mode==tf.estimator.ModeKeys.EVAL:
             auc = tf.metrics.auc(labels, features)
@@ -81,7 +81,7 @@ def tf_estimator_auc_one_labels(N0=1000):
 def tf_estimator_auc_multi_labels(N0=1000, N1=10):
     def _estimator_model_fn(features, labels, mode, params=None):
         tfvar1 = tf.get_variable('tfvar1', shape=[], dtype=tf.float32)
-        loss = tf.reduce_sum(features + tfvar1)*0
+        loss = tf.math.reduce_sum(features + tfvar1)*0
 
         if mode==tf.estimator.ModeKeys.EVAL:
             tmp1 = [x[:,0] for x in tf.split(labels, N1, axis=1)]

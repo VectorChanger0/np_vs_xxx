@@ -133,9 +133,9 @@ def tf_while_loop_simple(min_=10, max_=100, max_record=100):
     tf1 = tf.constant(0)
     tf2 = tf.constant(x0)
     tf3 = tf.constant(0, shape=[max_record])
-    cond = lambda x,y,z: tf.logical_and(tf.logical_not(tf.equal(y,1)), x<100)
+    cond = lambda x,y,z: tf.math.logical_and(tf.math.logical_not(tf.equal(y,1)), x<100)
     def body(x,y,z):
-        y = tf.cond(tf.equal(tf.mod(y,2), 0), lambda: tf.floordiv(y,2), lambda: 3*y+1)
+        y = tf.cond(tf.equal(tf.mod(y,2), 0), lambda: tf.math.floordiv(y,2), lambda: 3*y+1)
         z = tf.cond(x<max_record, lambda: tf.scatter_nd(x[tf.newaxis,tf.newaxis], y[tf.newaxis], [max_record])+z, lambda: z)
         return x+1,y,z
     tf4, _, tf5 = tf.while_loop(cond, body, [tf1,tf2,tf3])
@@ -158,9 +158,9 @@ def tf_while_loop(min_=10, max_=100, N0=5):
     tf1 = tf.constant(x0)
     tf2 = tf.constant(np2)
     tf3 = tf2
-    cond = lambda x,y: tf.logical_not(tf.equal(x,1))
+    cond = lambda x,y: tf.math.logical_not(tf.equal(x,1))
     def body(x,y):
-        tmp1 = tf.cond(tf.equal(tf.mod(x,2), 0), lambda: tf.floordiv(x,2), lambda: 3*x+1)
+        tmp1 = tf.cond(tf.equal(tf.mod(x,2), 0), lambda: tf.math.floordiv(x,2), lambda: 3*x+1)
         tmp2 = tf.nn.relu(tf.matmul(y, tf2))
         return tmp1, tmp2
     _, tf4 = tf.while_loop(cond, body, [tf1,tf3])
